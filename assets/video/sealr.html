@@ -1,0 +1,475 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Sealr demo</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root { --bg:#07090b; --surface:#11161a; --surface2:#171e23; --line:#25303a; --ink:#eef4f3; --dim:#a3b0b2; --faint:#6b787d;
+  --accent:#3EE0C0; --accent2:#18A98E; --ai:#A48BFF; --money:#F4BE55; --bad:#ff7a6e; --good:#5fd08f;
+  --sans:Inter,-apple-system,system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,Menlo,monospace; }
+* { box-sizing:border-box; margin:0; }
+html, body { width:1920px; height:1080px; overflow:hidden; background:var(--bg); color:var(--ink); font-family:var(--sans); }
+#stage { position:absolute; inset:0; overflow:hidden;
+  background: radial-gradient(900px 600px at 15% 10%, rgba(62,224,192,.10), transparent 70%), radial-gradient(800px 700px at 90% 95%, rgba(164,139,255,.08), transparent 70%), var(--bg); }
+#grid { position:absolute; inset:0; background-image:linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px); background-size:64px 64px; }
+.scene { position:absolute; inset:0; opacity:0; }
+.abs { position:absolute; }
+.center { position:absolute; left:0; right:0; text-align:center; }
+.eyebrow { position:absolute; left:96px; top:72px; font:600 20px/1 var(--mono); letter-spacing:.18em; color:var(--accent); text-transform:uppercase; }
+.big { font-weight:800; letter-spacing:-.035em; line-height:1.02; }
+.h1 { font-size:96px; } .h2 { font-size:72px; } .h3 { font-size:52px; }
+.dim { color:var(--dim); } .acc { color:var(--accent); } .bad { color:var(--bad); } .good { color:var(--good); } .money { color:var(--money); }
+.chip { display:inline-flex; align-items:center; gap:14px; padding:16px 28px; border-radius:999px; background:var(--surface); border:1px solid var(--line); font-size:30px; font-weight:600; white-space:nowrap; }
+.chip i { font-style:normal; }
+.card { background:var(--surface); border:1px solid var(--line); border-radius:28px; }
+/* phones */
+.phone { position:absolute; width:400px; height:866px; border-radius:62px; padding:12px; background:#1c2328; box-shadow:0 40px 120px rgba(0,0,0,.6), inset 0 0 0 2px #2c363d; transform-origin:50% 50%; }
+.phone .scr { position:relative; width:100%; height:100%; border-radius:50px; overflow:hidden; background:#07090b; }
+.phone .scr img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:top; opacity:0; }
+.phone .tap { position:absolute; width:90px; height:90px; margin:-45px 0 0 -45px; border-radius:50%; border:5px solid rgba(255,255,255,.9); background:rgba(62,224,192,.25); opacity:0; pointer-events:none; }
+.phone .who { position:absolute; left:0; right:0; top:-62px; text-align:center; font-size:30px; font-weight:700; }
+.phone .who span { display:inline-flex; align-items:center; gap:12px; }
+.phone .who b { width:34px; height:34px; border-radius:50%; display:inline-grid; place-items:center; font-size:18px; color:#03231c; }
+.status { position:absolute; left:0; right:0; top:150px; text-align:center; }
+.status .chip { background:rgba(10,14,16,.92); box-shadow:0 10px 40px rgba(0,0,0,.6); }
+/* captions */
+#cap { position:absolute; left:0; right:0; bottom:38px; text-align:center; pointer-events:none; }
+#cap span { display:inline-block; max-width:1500px; padding:12px 26px; border-radius:16px; background:rgba(5,8,10,.78); font-size:31px; font-weight:500; line-height:1.3; color:#f4f8f7; }
+#brand { position:absolute; right:96px; top:56px; display:flex; align-items:center; gap:14px; font-size:30px; font-weight:750; letter-spacing:-.02em; }
+.mark { display:inline-block; }
+/* problem */
+.tile { position:absolute; width:300px; height:300px; border-radius:64px; display:grid; place-items:center; background:var(--surface); border:2px solid var(--line); }
+.tile svg { width:130px; height:130px; }
+.tile-l { position:absolute; width:400px; text-align:center; font-size:30px; font-weight:600; color:var(--dim); }
+.dot { position:absolute; width:26px; height:26px; border-radius:50%; background:#2a3640; }
+.stamp { position:absolute; padding:18px 36px; border:6px solid var(--bad); color:var(--bad); border-radius:18px; font:800 64px/1 var(--sans); letter-spacing:.06em; transform-origin:50% 50%; }
+.app { position:absolute; inset:0; border-radius:50px; overflow:hidden; opacity:0; }
+.app .bar { height:120px; padding:62px 30px 0; font-size:30px; font-weight:800; }
+.sw { position:absolute; width:260px; height:520px; border-radius:36px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,.5); }
+/* quantum */
+.pkt { position:absolute; display:flex; align-items:center; gap:12px; padding:14px 22px; border-radius:16px; background:var(--surface); border:1px solid var(--line); font:500 22px var(--mono); color:var(--dim); white-space:nowrap; }
+.vault { position:absolute; width:440px; height:320px; border-radius:32px; border:3px solid var(--bad); background:rgba(255,122,110,.07); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; }
+.msgcard { position:absolute; width:640px; padding:22px 28px; border-radius:20px; border:2px solid var(--line); background:var(--surface); font-size:30px; font-weight:600; display:flex; gap:18px; align-items:center; }
+.msgcard .ct { font:500 24px var(--mono); color:var(--faint); }
+/* account steps */
+.step { display:flex; align-items:center; gap:26px; font-size:38px; font-weight:650; color:var(--faint); margin:0 0 30px; }
+.step b { width:64px; height:64px; flex:none; border-radius:50%; display:grid; place-items:center; background:var(--surface); border:2px solid var(--line); font-size:28px; }
+.step.on { color:var(--ink); } .step.on b { background:var(--accent); color:#03231c; border-color:var(--accent); }
+.step.done { color:var(--dim); } .step.done b { background:rgba(62,224,192,.15); color:var(--accent); border-color:transparent; }
+/* chat middle */
+.env { position:absolute; width:96px; height:72px; border-radius:16px; background:linear-gradient(135deg, var(--accent), var(--accent2)); display:grid; place-items:center; box-shadow:0 10px 40px rgba(62,224,192,.45); opacity:0; }
+.server { position:absolute; left:740px; top:400px; width:440px; padding:26px; border-radius:28px; background:var(--surface); border:2px solid var(--line); opacity:0; }
+.server .ct { font:500 19px/1.55 var(--mono); color:#5d6b70; height:150px; overflow:hidden; word-break:break-all; margin:14px 0; }
+.badge { position:absolute; padding:20px 26px; border-radius:22px; background:rgba(62,224,192,.1); border:2px solid rgba(62,224,192,.5); font-size:24px; font-weight:600; opacity:0; }
+.badge .l { display:flex; gap:12px; align-items:center; margin-top:8px; font:500 21px var(--mono); color:var(--dim); }
+/* qday */
+.verdict { position:absolute; left:1060px; width:760px; padding:30px 36px; border-radius:28px; opacity:0; }
+.verdict .h { font:800 26px/1 var(--mono); letter-spacing:.12em; display:flex; align-items:center; gap:12px; }
+.verdict .t { font-size:40px; font-weight:750; margin:16px 0 10px; letter-spacing:-.02em; }
+.verdict .s { font-size:26px; color:var(--dim); line-height:1.4; }
+.browser { position:absolute; width:1080px; border-radius:22px; overflow:hidden; background:#0d1114; box-shadow:0 40px 120px rgba(0,0,0,.7); border:1px solid #2b363c; opacity:0; }
+.browser .top { height:52px; display:flex; align-items:center; gap:10px; padding:0 20px; background:#161c20; }
+.browser .top i { width:14px; height:14px; border-radius:50%; background:#3a454c; display:inline-block; }
+.browser .url { margin-left:18px; flex:1; height:32px; border-radius:10px; background:#0d1114; font:500 17px/32px var(--mono); color:var(--dim); padding:0 14px; }
+.browser img { display:block; width:100%; }
+.hl { position:absolute; border:4px solid var(--accent); border-radius:14px; box-shadow:0 0 0 9999px rgba(0,0,0,.0); opacity:0; }
+</style></head>
+<body>
+<div id="stage"><div id="grid"></div>
+
+<!-- 1. THE PROBLEM -->
+<section class="scene" id="sc-problem">
+  <div class="eyebrow">The problem</div>
+  <div class="center big h2" id="p-head" style="top:150px">We trust apps with everything.</div>
+  <div id="p-tiles">
+    <div class="tile" id="tile0" style="left:390px;top:360px"><svg viewBox="0 0 24 24" fill="none" stroke="#3EE0C0" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg></div>
+    <div class="tile" id="tile1" style="left:810px;top:360px"><svg viewBox="0 0 24 24" fill="none" stroke="#A48BFF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><circle cx="9" cy="11" r="2.2"/><path d="M5.8 16c.6-1.6 1.8-2.4 3.2-2.4s2.6.8 3.2 2.4M15 10h3.5M15 13.5h3.5"/></svg></div>
+    <div class="tile" id="tile2" style="left:1230px;top:360px"><svg viewBox="0 0 24 24" fill="none" stroke="#F4BE55" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5.5" width="19" height="13" rx="3"/><path d="M2.5 10h19M6.5 15h4"/></svg></div>
+    <div class="tile-l" id="tl0" style="left:340px;top:690px">Private conversations</div>
+    <div class="tile-l" id="tl1" style="left:760px;top:690px">Personal information</div>
+    <div class="tile-l" id="tl2" style="left:1180px;top:690px">Money</div>
+  </div>
+  <div id="p-breach">
+    <div class="stamp" id="p-stamp" style="left:690px;top:120px">DATA BREACH</div>
+    <div id="dots"></div>
+    <div class="center h3 big" id="p-mill" style="top:770px"><span class="bad">Millions</span> of accounts exposed</div>
+    <div id="p-stolen" class="center" style="top:880px">
+      <span class="chip" style="border-color:rgba(255,122,110,.5)">🔑 Passwords</span>&nbsp;&nbsp;
+      <span class="chip" style="border-color:rgba(255,122,110,.5)">💬 Messages</span>&nbsp;&nbsp;
+      <span class="chip" style="border-color:rgba(255,122,110,.5)">💳 Card details</span>&nbsp;&nbsp;
+      <span class="chip bad" style="background:rgba(255,122,110,.15);border-color:var(--bad)">STOLEN</span>
+    </div>
+  </div>
+  <div id="p-apps">
+    <div class="phone" id="gp" style="left:760px;top:120px;width:400px;height:820px"><div class="scr">
+      <div class="app" id="app0" style="background:#eef3ff;color:#1b2b55"><div class="bar">Messages</div>
+        <div style="padding:20px 26px;display:grid;gap:18px">
+          <div style="background:#fff;border-radius:22px;padding:18px;font-size:22px">Sent you the contract 📄</div>
+          <div style="background:#3b6cf6;color:#fff;border-radius:22px;padding:18px;font-size:22px;margin-left:60px">Got it, thanks!</div>
+          <div style="background:#fff;border-radius:22px;padding:18px;font-size:22px">Can you pay me back?</div></div></div>
+      <div class="app" id="app1" style="background:#fff7ec;color:#5a3300"><div class="bar">Files</div>
+        <div style="padding:20px 26px;display:grid;grid-template-columns:1fr 1fr;gap:18px">
+          <div style="height:130px;border-radius:20px;background:#ffd79a"></div><div style="height:130px;border-radius:20px;background:#ffc46b"></div>
+          <div style="height:130px;border-radius:20px;background:#ffe2b8"></div><div style="height:130px;border-radius:20px;background:#ffcf87"></div></div></div>
+      <div class="app" id="app2" style="background:#eafaf1;color:#0d3b22"><div class="bar">Bank</div>
+        <div style="margin:20px 26px;height:200px;border-radius:26px;background:linear-gradient(135deg,#1b8a52,#0f5a35);color:#fff;padding:26px;font-size:24px">Balance<div style="font-size:44px;font-weight:800;margin-top:10px">$1,240.00</div></div>
+        <div style="margin:0 26px;padding:18px;border-radius:20px;background:#fff;font-size:22px">Send money →</div></div>
+    </div></div>
+    <div id="switcher">
+      <div class="sw" id="sw0" style="background:#eef3ff"><div style="padding:30px;font:800 26px var(--sans);color:#1b2b55">Messages</div></div>
+      <div class="sw" id="sw1" style="background:#fff7ec"><div style="padding:30px;font:800 26px var(--sans);color:#5a3300">Files</div></div>
+      <div class="sw" id="sw2" style="background:#eafaf1"><div style="padding:30px;font:800 26px var(--sans);color:#0d3b22">Bank</div></div>
+      <div class="sw" id="sw3" style="background:#f3edff"><div style="padding:30px;font:800 26px var(--sans);color:#38216b">Wallet</div></div>
+    </div>
+    <div class="abs" id="p-actlabels" style="left:1250px;top:380px;font-size:40px;font-weight:700;line-height:1.9">
+      <div id="pa0">Send a message</div><div id="pa1">Share a file</div><div id="pa2">Make a payment</div></div>
+  </div>
+  <div id="p-more" class="center" style="top:300px">
+    <div class="big h1" id="pm0">More apps.</div>
+    <div class="big h1" id="pm1">More accounts.</div>
+    <div class="big h1 bad" id="pm2">More risks.</div>
+  </div>
+</section>
+
+<!-- 2. THE QUANTUM THREAT -->
+<section class="scene" id="sc-quantum">
+  <div class="eyebrow">The quantum threat</div>
+  <svg class="abs" id="qchip" style="left:660px;top:240px" width="600" height="600" viewBox="0 0 600 600">
+    <defs><radialGradient id="qg"><stop offset="0" stop-color="#A48BFF" stop-opacity=".55"/><stop offset="1" stop-color="#A48BFF" stop-opacity="0"/></radialGradient></defs>
+    <circle cx="300" cy="300" r="280" fill="url(#qg)"/>
+    <g id="qrings" fill="none" stroke="#A48BFF" stroke-opacity=".5" stroke-width="2"><circle cx="300" cy="300" r="120"/><circle cx="300" cy="300" r="180"/><circle cx="300" cy="300" r="240"/></g>
+    <g id="qdots" fill="#d9ceff"></g>
+  </svg>
+  <div class="center big h2" id="t-head" style="top:440px">The biggest threat may still be <span style="color:var(--ai)">ahead.</span></div>
+  <div id="t-harvest">
+    <div id="pkts"></div>
+    <div class="vault" id="vault" style="left:1340px;top:380px">
+      <svg width="70" height="70" viewBox="0 0 24 24" fill="none" stroke="#ff7a6e" stroke-width="1.8"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+      <div style="font-size:34px;font-weight:800">Attacker's archive</div>
+      <div style="font:500 24px var(--mono);color:var(--dim)" id="vcount">0 messages stored</div>
+    </div>
+    <div class="abs" style="left:96px;top:150px;font-size:44px;font-weight:700;width:1100px" id="t-cap">Captured today. Stored for later.</div>
+  </div>
+  <div id="t-hn">
+    <div class="abs big" style="left:96px;top:300px;font-size:110px;width:1000px">Harvest now,<br><span class="bad">decrypt later.</span></div>
+    <div class="phone" id="ph-harvest" style="left:1300px;top:110px"><div class="scr"></div><div class="tap"></div></div>
+  </div>
+  <div id="t-qd">
+    <div class="msgcard" id="mc0" style="left:96px;top:250px"><span id="mi0">🔒</span><span class="ct" id="mt0">a9F3kQ0zP7xLm2Vb8rTq…</span></div>
+    <div class="msgcard" id="mc1" style="left:96px;top:370px"><span id="mi1">🔒</span><span class="ct" id="mt1">Zk82Lq9mWc4Tf1Hs0pXn…</span></div>
+    <div class="msgcard" id="mc2" style="left:96px;top:490px"><span id="mi2">🔒</span><span class="ct" id="mt2">Qv7Ns3Ue8Bd5Ry2Kc6Lw…</span></div>
+    <div class="abs" style="left:96px;top:720px;width:1728px;height:6px;border-radius:3px;background:var(--line)"></div>
+    <div class="abs" id="qd-fill" style="left:96px;top:720px;width:0;height:6px;border-radius:3px;background:linear-gradient(90deg,var(--accent),var(--ai),var(--bad))"></div>
+    <div class="abs" style="left:96px;top:750px;font:600 26px var(--mono);color:var(--accent)">TODAY</div>
+    <div class="abs" id="qd-label" style="left:1600px;top:750px;font:700 26px var(--mono);color:var(--bad)">Q-DAY ⚡</div>
+    <div class="abs" id="qd-note" style="left:860px;top:300px;width:960px;font-size:46px;font-weight:750;line-height:1.25">Quantum computers break the encryption most apps use <span class="bad">today.</span></div>
+  </div>
+</section>
+
+<!-- 3. MEET SEALR -->
+<section class="scene" id="sc-intro">
+  <div id="i-logo" class="abs" style="left:0;right:0;top:300px;text-align:center">
+    <svg class="mark" id="bigmark" width="240" height="240" viewBox="0 0 512 512"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5BE6CB"/><stop offset="1" stop-color="#1FAE93"/></linearGradient></defs>
+      <circle cx="256" cy="256" r="132" fill="none" stroke="url(#lg)" stroke-width="30"/><circle cx="256" cy="228" r="36" fill="#fff"/><path d="M236 246L225 326h62l-11-80z" fill="#fff"/></svg>
+    <div class="big" style="font-size:150px;margin-top:10px" id="i-word">Sealr</div>
+  </div>
+  <div id="i-chips" class="center" style="top:820px">
+    <span class="chip" id="ic0">💬 Private messaging</span>&nbsp;&nbsp;<span class="chip" id="ic1">💸 Crypto payments</span>&nbsp;&nbsp;<span class="chip" id="ic2">⛓️ Built on QoreChain</span>&nbsp;&nbsp;<span class="chip" id="ic3" style="border-color:var(--accent);color:var(--accent)">🔐 Post-quantum encryption</span>
+  </div>
+  <div id="i-phones">
+    <div class="phone" id="ph-i0" style="left:330px;top:100px"><div class="scr"></div><div class="tap"></div></div>
+    <div class="phone" id="ph-i1" style="left:760px;top:60px"><div class="scr"></div><div class="tap"></div></div>
+    <div class="phone" id="ph-i2" style="left:1190px;top:100px"><div class="scr"></div><div class="tap"></div></div>
+    <div class="abs" id="il0" style="left:330px;width:400px;top:1040px;text-align:center;font-size:34px;font-weight:700">Communicate</div>
+  </div>
+  <div id="i-id">
+    <div class="card abs" id="idcard" style="left:560px;top:250px;width:800px;padding:44px;text-align:center">
+      <div style="width:120px;height:120px;border-radius:50%;margin:0 auto;background:linear-gradient(135deg,#3EE0C0,#18A98E);display:grid;place-items:center;font-size:56px;font-weight:800;color:#03231c">A</div>
+      <div style="font:500 34px var(--mono);margin-top:26px">qor1l0uj…khlc0z</div>
+      <div style="font-size:30px;color:var(--dim);margin-top:10px">Wallet address · ML-DSA-87 keys on this device</div>
+    </div>
+    <div class="center" style="top:620px"><span class="chip" id="ix0"><i class="bad">✕</i> <s>Phone number</s></span>&nbsp;&nbsp;<span class="chip" id="ix1"><i class="bad">✕</i> <s>Email</s></span></div>
+    <div class="center big h2" id="ix2" style="top:760px">Your wallet <span class="acc">is your identity.</span></div>
+  </div>
+</section>
+
+<!-- 4. GET STARTED -->
+<section class="scene" id="sc-account">
+  <div class="eyebrow">Get started</div>
+  <div class="phone" id="ph-acc" style="left:300px;top:110px"><div class="scr"></div><div class="tap"></div></div>
+  <div class="abs" style="left:900px;top:240px" id="steps">
+    <div class="step" id="st0"><b>1</b>Create your account</div>
+    <div class="step" id="st1"><b>2</b>Back up your recovery phrase</div>
+    <div class="step" id="st2"><b>3</b>Set your password</div>
+    <div class="step" id="st3"><b>4</b>Keys stay on your device</div>
+    <div class="step" id="st4"><b>5</b>Sealr AI guides you</div>
+  </div>
+</section>
+
+<!-- 5. CHAT + PAY -->
+<section class="scene" id="sc-chat">
+  <div class="phone" id="ph-alice" style="left:250px;top:130px"><div class="who"><span><b style="background:#3EE0C0">A</b>Alice</span></div><div class="scr"></div><div class="tap"></div></div>
+  <div class="phone" id="ph-bob" style="left:1270px;top:130px"><div class="who"><span><b style="background:#5fd08f">B</b>Bob</span></div><div class="scr"></div><div class="tap"></div></div>
+  <div class="env" id="env"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#03231c" stroke-width="2.2" stroke-linecap="round"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></svg></div>
+  <div class="badge" id="seal-badge" style="left:715px;top:200px;width:490px">🔐 Sealed on Alice's phone
+    <div class="l">ML-KEM-1024 + X25519</div><div class="l">Signed with ML-DSA-87</div></div>
+  <div class="server" id="server">
+    <div style="font-size:26px;font-weight:750;display:flex;gap:12px;align-items:center">🖥️ Relay server sees</div>
+    <div class="ct" id="srv-ct"></div>
+    <div style="font-size:24px;font-weight:650" class="bad">✕ Not a readable conversation</div>
+  </div>
+  <div class="badge" id="paid-badge" style="left:735px;top:420px;width:450px;text-align:center;background:rgba(244,190,85,.12);border-color:rgba(244,190,85,.6)">✓ 5 QOR paid
+    <div class="l" style="justify-content:center">Confirmed on QoreChain</div></div>
+  <div class="abs" style="left:700px;width:520px;top:640px;text-align:center" id="nochips">
+    <div class="chip" id="nc0" style="margin-bottom:18px"><i class="bad">✕</i> Switching apps</div><br>
+    <div class="chip" id="nc1"><i class="bad">✕</i> Copying addresses</div>
+  </div>
+</section>
+
+<!-- 6. GROUPS -->
+<section class="scene" id="sc-group">
+  <div class="phone" id="ph-ga" style="left:150px;top:150px"><div class="who"><span><b style="background:#3EE0C0">A</b>Alice</span></div><div class="scr"></div><div class="tap"></div></div>
+  <div class="phone" id="ph-gb" style="left:760px;top:150px"><div class="who"><span><b style="background:#5fd08f">B</b>Bob</span></div><div class="scr"></div><div class="tap"></div>
+    <div class="status" id="gb-st"><span class="chip good" style="border-color:var(--good)">✓ Can read new messages</span></div></div>
+  <div class="phone" id="ph-gc" style="left:1370px;top:150px"><div class="who"><span><b style="background:#ff7a6e">C</b>Carol</span></div><div class="scr"></div><div class="tap"></div>
+    <div class="status" id="gc-st"><span class="chip bad" style="border-color:var(--bad)">✕ Can't decrypt</span></div></div>
+  <div class="abs" id="gc-x" style="left:1370px;top:150px;width:400px;height:866px;border-radius:62px;border:6px solid var(--bad);opacity:0"></div>
+</section>
+
+<!-- 7. THE Q-DAY TEST -->
+<section class="scene" id="sc-qday">
+  <div class="eyebrow">The Q-Day test</div>
+  <div class="center big h1" id="q-head" style="top:430px">Now for the <span class="acc">real test.</span></div>
+  <div class="phone" id="ph-q" style="left:300px;top:110px"><div class="scr"></div><div class="tap"></div></div>
+  <div class="abs" id="q-what" style="left:1000px;top:250px;width:820px">
+    <div style="font:600 24px var(--mono);letter-spacing:.14em;color:var(--bad)">AN INTERCEPTOR CAPTURES</div>
+    <div class="big h2" style="margin-top:20px" id="q-enc">Encrypted data.</div>
+    <div class="big h3 dim" style="margin-top:14px" id="q-not">Not the original conversation.</div>
+    <div id="q-ct" style="margin-top:34px;font:500 22px/1.6 var(--mono);color:#56646a;word-break:break-all;height:220px;overflow:hidden"></div>
+  </div>
+  <div class="abs" id="q-sim" style="left:1000px;top:250px;width:820px">
+    <div style="font:600 24px var(--mono);letter-spacing:.14em;color:var(--money)">⚡ Q-DAY SIMULATOR</div>
+    <div class="big h3" style="margin-top:20px">The attacker gets the broken X25519 key.</div>
+    <div style="font-size:30px;color:var(--dim);margin-top:20px;line-height:1.4">Real cryptography, run in the browser. Only the quantum computer is simulated.</div>
+  </div>
+  <div class="verdict" id="v-bad" style="top:220px;background:rgba(255,122,110,.1);border:3px solid var(--bad)">
+    <div class="h bad">⚠ CRACKED</div><div class="t">Typical chat app today</div>
+    <div class="s">X25519 + AES-GCM</div>
+    <div style="font-size:32px;font-weight:700;margin-top:18px;color:#ffb3aa">"Meet me at the bridge at 6. Bring the contract."</div></div>
+  <div class="verdict" id="v-good" style="top:600px;background:rgba(62,224,192,.1);border:3px solid var(--accent)">
+    <div class="h acc">🔒 STILL SEALED</div><div class="t">Sealr</div>
+    <div class="s">ML-KEM-1024 + X25519: breaking X25519 alone is not enough.</div></div>
+  <div class="center big h1" id="q-exp" style="top:380px">Privacy shouldn't have<br>an <span class="acc">expiration date.</span></div>
+</section>
+
+<!-- 8. FINAL -->
+<section class="scene" id="sc-final">
+  <div class="eyebrow" id="f-eye">And there's more</div>
+  <div class="phone" id="ph-w" style="left:250px;top:110px"><div class="scr"></div><div class="tap"></div></div>
+  <div class="abs" id="f-swap" style="left:800px;top:330px;width:960px">
+    <div class="big h2">Swap <span class="acc">QOR → fUSD</span></div>
+    <div style="font-size:32px;color:var(--dim);margin-top:22px;line-height:1.4">On QoreChain's on-chain AMM. Hybrid-signed, settled in one block.</div>
+  </div>
+  <div class="browser" id="f-browser" style="left:760px;top:130px"><div class="top"><i></i><i></i><i></i><div class="url">explore.qore.network/tx/4EB34A4A…12352552</div></div><img src="shots/w05-explorer.png"></div>
+  <div class="hl" id="f-hl" style="left:1668px;top:322px;width:104px;height:42px"></div>
+  <div id="f-three" class="abs" style="left:0;right:0;top:300px;text-align:center">
+    <div class="big h1" id="f3a">Private chats.</div>
+    <div class="big h1" id="f3b">Seamless payments.</div>
+    <div class="big h1 acc" id="f3c">One identity.</div>
+  </div>
+  <div id="f-end" class="abs" style="left:0;right:0;top:170px;text-align:center">
+    <svg width="200" height="200" viewBox="0 0 512 512"><circle cx="256" cy="256" r="132" fill="none" stroke="url(#lg)" stroke-width="30"/><circle cx="256" cy="228" r="36" fill="#fff"/><path d="M236 246L225 326h62l-11-80z" fill="#fff"/></svg>
+    <div class="big" style="font-size:140px;margin-top:6px">Sealr</div>
+    <div class="big h2" style="margin-top:34px"><span id="fe0">Talk.</span> <span id="fe1">Pay.</span> <span id="fe2" class="acc">Stay private.</span></div>
+    <div style="font-size:40px;font-weight:600;color:var(--dim);margin-top:26px" id="fe3">Today, and beyond Q-Day.</div>
+    <div style="font:500 22px var(--mono);color:var(--faint);margin-top:60px;letter-spacing:.08em" id="fe4">BUILT ON QORECHAIN · ML-KEM-1024 · ML-DSA-87</div>
+  </div>
+</section>
+
+<div id="brand"><svg width="40" height="40" viewBox="0 0 512 512"><circle cx="256" cy="256" r="132" fill="none" stroke="url(#lg)" stroke-width="34"/><circle cx="256" cy="228" r="38" fill="#fff"/><path d="M236 246L225 326h62l-11-80z" fill="#fff"/></svg>Sealr</div>
+<div id="cap"><span></span></div>
+</div>
+
+<script src="timeline.js"></script>
+<script>
+const TL = window.TIMELINE; window.DURATION = window.TOTAL;
+const L = id => TL.find(l => l.id === id);
+const S = id => L(id).start, E = id => L(id).end;
+const C = (id, cue) => L(id).cues[cue] ?? L(id).start;
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const eo = x => 1 - Math.pow(1 - clamp(x), 3);
+const io = x => { x = clamp(x); return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
+const p = (t, a, d = .5) => eo((t - a) / d);               // 0→1 after time a
+const win = (t, a, b, f = .45) => Math.min(p(t, a, f), 1 - p(t, b, f)); // in at a, out at b
+const $ = id => document.getElementById(id);
+const set = (id, o, tf) => { const e = typeof id === "string" ? $(id) : id; e.style.opacity = o; if (tf !== undefined) e.style.transform = tf; };
+const pop = (t, a, d = .45) => { const k = p(t, a, d); return [k, `translateY(${(1 - k) * 40}px) scale(${.94 + .06 * k})`]; };
+
+// Scenes cross-fade around their first and last lines.
+const SCENES = [...new Set(TL.map(l => l.scene))];
+const range = sc => { const ls = TL.filter(l => l.scene === sc); return [ls[0].start, ls[ls.length - 1].end]; };
+
+// Phones: a sequence of screenshots that cross-fade, and taps.
+const PH = {};
+function phone(id, seq, taps = []) {
+  const scr = $(id).querySelector(".scr");
+  const imgs = seq.map(([, src]) => { const im = new Image(); im.src = `shots/${src}.png`; scr.appendChild(im); return im; });
+  PH[id] = { seq, imgs, taps, tap: $(id).querySelector(".tap") };
+}
+function drawPhone(id, t) {
+  const ph = PH[id]; let k = 0;
+  ph.seq.forEach(([at], i) => { if (t >= at) k = i; });
+  ph.imgs.forEach((im, i) => im.style.opacity = i === k ? (k === 0 ? 1 : clamp((t - ph.seq[k][0]) / .12)) : i === k - 1 && t - ph.seq[k][0] < .12 ? 1 : 0);
+  const tap = ph.taps.find(([at]) => t >= at && t < at + .8);
+  if (tap) { const k2 = (t - tap[0]) / .8; ph.tap.style.left = tap[1] + "%"; ph.tap.style.top = tap[2] + "%"; ph.tap.style.opacity = 1 - k2; ph.tap.style.transform = `scale(${.6 + k2 * .9})`; }
+  else ph.tap.style.opacity = 0;
+}
+
+// Problem: accounts grid.
+const dots = [];
+for (let r = 0; r < 6; r++) for (let c = 0; c < 30; c++) { const d = document.createElement("div"); d.className = "dot"; d.style.left = 380 + c * 40 + "px"; d.style.top = 470 + r * 44 + "px"; $("dots").appendChild(d); dots.push([d, Math.random()]); }
+// Quantum: qubit dots and captured packets.
+for (let i = 0; i < 18; i++) { const a = i / 18 * Math.PI * 2, r = [120, 180, 240][i % 3]; const c = document.createElementNS("http://www.w3.org/2000/svg", "circle"); c.setAttribute("cx", 300 + Math.cos(a) * r); c.setAttribute("cy", 300 + Math.sin(a) * r); c.setAttribute("r", 7); $("qdots").appendChild(c); }
+const GIB = "A9f3kQ0zP7xLm2Vb8rTqZk82Lq9mWc4Tf1Hs0pXnQv7Ns3Ue8Bd5Ry2Kc6Lw/+";
+const gib = (n, seed) => { let s = "", x = seed * 9301 + 49297; for (let i = 0; i < n; i++) { x = (x * 9301 + 49297) % 233280; s += GIB[x % GIB.length]; } return s; };
+const pkts = [];
+for (let i = 0; i < 14; i++) { const e = document.createElement("div"); e.className = "pkt"; e.innerHTML = `🔒 ${gib(16, i + 3)}…`; $("pkts").appendChild(e); pkts.push(e); }
+$("srv-ct").textContent = Array.from({ length: 9 }, (_, i) => gib(34, i + 40)).join(" ");
+$("q-ct").textContent = Array.from({ length: 10 }, (_, i) => gib(54, i + 90)).join(" ");
+
+// Screen sequences, timed to the narration.
+phone("ph-harvest", [[0, "s01-intro-harvest"]]);
+phone("ph-i0", [[0, "c07-bob-reply"]]);
+phone("ph-i1", [[0, "c05-alice-photo"]]);
+phone("ph-i2", [[0, "w01-wallet"]]);
+phone("ph-acc", [[0, "s05-intro-cta"], [S("a2") + .2, "s06-seed"], [C("a2", "Back") + .5, "s07-seed-checked"], [C("a2", "password.") - .7, "s08-password"], [S("a3"), "s09-chats-new"], [S("a4") + .2, "s10-ai-welcome"]],
+  [[S("a1") + .4, 50, 43.5], [C("a2", "Back") + .2, 9, 86], [S("a3") - .35, 50, 85.6]]);
+const send1 = S("m2") + .3, photo = C("m2", "then") + .3;
+phone("ph-alice", [[0, "c01-alice-typing"], [send1, "c02-alice-sealing"], [send1 + .9, "c03-alice-sent"], [photo, "c04-alice-photo-sealing"], [photo + 1.1, "c05-alice-photo"],
+  [S("m6"), "c08-alice-attach"], [S("m6") + .9, "c09-alice-request-sheet"], [E("m6") - .2, "c10-alice-requested"], [C("m8", "receipt"), "c15-alice-paid"]],
+  [[send1 - .2, 91, 96], [S("m6") - .1, 8, 96], [S("m6") + .6, 82, 87.6], [E("m6") - .6, 51, 96]]);
+phone("ph-bob", [[0, "c06-bob-received"], [(E("m4") + .35) + .3, "c07-bob-reply"], [E("m6") + .1, "c11-bob-request"], [S("m7") + .45, "c12-bob-pay-sheet"], [S("m7") + 1.3, "c13-bob-paying"], [S("m8") + .9, "c14-bob-paid"]],
+  [[S("m7") + .05, 19, 85.5], [S("m7") + 1.0, 74, 94.5]]);
+phone("ph-ga", [[0, "g02-alice-group"], [S("g2") + .1, "g04-alice-info"], [C("g2", "Carol.") + .45, "g05-alice-removed"], [S("g3") - .2, "g06-alice-secret"]], [[S("g2") + .9, 88, 93.5]]);
+phone("ph-gb", [[0, "g03-bob-group"], [S("g3") + .2, "g07-bob-secret"]]);
+phone("ph-gc", [[0, "g03-carol-group"], [S("g4"), "g08-carol-locked"]]);
+const sim = S("q4") + .9;
+phone("ph-q", [[0, "q01-spy-captured"], [S("q4") + .1, "q02-qday"], [sim + .25, "q03-qday-step1"], [sim + 1.2, "q04-qday-step2"], [sim + 2.1, "q05-qday-step3"], [S("q5") + 1.6, "q06-qday-result"], [S("q6") + .1, "q07-qday-sealr"]], [[sim, 26, 20.5]]);
+phone("ph-w", [[0, "w01-wallet"], [S("f1") + .6, "w01-wallet"], [S("f2"), "w02-swap-quote"], [C("f2", "tokens,") + .2, "w03-swapping"], [C("f2", "tokens,") + 1.3, "w04-swapped"]], [[S("f1") + .5, 62, 40], [C("f2", "tokens,") - .2, 50, 95.5]]);
+
+const NOCAP = new Set(["p4", "t3", "i1", "q1", "q7", "f3", "f4", "f5", "f6"]);
+function render(t) {
+  for (const sc of SCENES) { const [a, b] = range(sc); const first = sc === SCENES[0], last = sc === SCENES[SCENES.length - 1];
+    const fin = p(t, a - .32, .3), fout = 1 - p(t, b + .1, .28); // out before the next scene comes in
+    const o = first ? fout : last ? fin : Math.min(fin, fout); $("sc-" + sc).style.opacity = o; $("sc-" + sc).style.visibility = o > 0.002 ? "visible" : "hidden"; }
+  const cur = TL.find(l => t >= l.start - .05 && t < l.end + Math.min(l.pause, .35));
+  const cap = $("cap").firstChild; cap.textContent = cur && !NOCAP.has(cur.id) ? cur.text : ""; cap.style.opacity = cap.textContent ? 1 : 0;
+  set("brand", win(t, S("a1") - .3, E("q7"), .5));
+
+  // 1. Problem
+  set("p-head", ...pop(t, .2)); $("p-head").style.opacity = win(t, .2, S("p2"));
+  [["chats,", 0], ["data,", 1], ["money.", 2]].forEach(([cue, i]) => {
+    const [k, tf] = pop(t, Math.min(C("p1", cue) - .5, .4 + i * .5));
+    const shake = t > S("p2") && t < S("p2") + .6 ? Math.sin(t * 90) * 8 : 0;
+    set("tile" + i, k, `${tf} translateX(${shake}px)`); set("tl" + i, k);
+    $("tile" + i).style.borderColor = t > S("p2") ? "var(--bad)" : "var(--line)";
+  });
+  const tilesUp = p(t, S("p2") + .5, .5);
+  $("p-tiles").style.transform = `translateY(${-tilesUp * 600}px)`; $("p-tiles").style.opacity = 1 - tilesUp;
+  const st = p(t, S("p2"), .25); set("p-stamp", st * win(t, S("p2"), S("p3")), `rotate(-6deg) scale(${2 - st})`);
+  dots.forEach(([d, r], i) => { d.style.opacity = win(t, S("p2") + 1.2 + i * .002, S("p3")); d.style.background = t > C("p2", "Millions") + r * 1.6 ? "var(--bad)" : "#2a3640"; });
+  set("p-mill", ...pop(t, C("p2", "Millions"))); $("p-mill").style.opacity = win(t, C("p2", "Millions"), S("p3"));
+  $("p-stolen").style.opacity = win(t, C("p2", "exposed.") + .3, S("p3"));
+  $("p-apps").style.opacity = win(t, S("p3") - .1, S("p4") - .45, .35);
+  const cues3 = [C("p3", "chat,"), C("p3", "share,"), C("p3", "pay,")];
+  const sw = t >= C("p3", "juggle");
+  ["app0", "app1", "app2"].forEach((id, i) => set(id, !sw && t >= cues3[i] - .3 && (i === 2 || t < cues3[i + 1] - .3) ? 1 : 0));
+  set("gp", 1 - p(t, C("p3", "juggle") - .1, .3), `scale(${1 - .15 * p(t, C("p3", "juggle") - .1, .3)})`);
+  ["sw0", "sw1", "sw2", "sw3"].forEach((id, i) => { const k = p(t, C("p3", "juggle") - .1, .4); const x = 300 + i * 340 - ((t - C("p3", "juggle")) * 260 % 340); set(id, k, `translate(${x}px, ${280 + (i % 2) * 30}px) rotate(${(i - 1.5) * 3}deg)`); });
+  ["pa0", "pa1", "pa2"].forEach((id, i) => { $(id).style.opacity = sw ? 0 : t >= cues3[i] - .3 ? (i === 2 || t < cues3[i + 1] - .3 ? 1 : .35) : 0; });
+  [S("p4"), C("p4", "risks.")].forEach((a, i) => set("pm" + [0, 2][i], ...pop(t, a - .15))); $("pm1").style.display = "none";
+  $("p-more").style.opacity = 1;
+
+  // 2. Quantum
+  $("qchip").style.opacity = win(t, S("t1") - .3, S("t2"), .6) * .9; $("qrings").setAttribute("transform", `rotate(${t * 12} 300 300)`);
+  set("t-head", ...pop(t, S("t1"))); $("t-head").style.opacity = win(t, S("t1"), S("t2") - .4, .35); $("qchip").style.display = t > S("t2") ? "none" : "";
+  $("t-harvest").style.opacity = win(t, S("t2") + .05, S("t3") - .4, .35);
+  pkts.forEach((e, i) => { const k = ((t - S("t2")) * .55 + i / pkts.length) % 1; const on = t > S("t2") + i * .12;
+    e.style.opacity = on ? Math.min(1, Math.min(k, 1 - k) * 6) : 0; e.style.transform = `translate(${96 + k * 1150}px, ${300 + (i * 97) % 560}px)`; });
+  $("vcount").textContent = `${Math.max(0, Math.floor((t - S("t2")) * 377)).toLocaleString("en-US")} messages stored`;
+  $("vault").style.boxShadow = t > C("t2", "store") ? `0 0 ${40 + 20 * Math.sin(t * 6)}px rgba(255,122,110,.35)` : "none";
+  $("t-hn").style.opacity = win(t, S("t3") + .05, S("t4") - .4, .35);
+  drawPhone("ph-harvest", t); set("ph-harvest", 1, `translateY(${(1 - p(t, S("t3"), .7)) * 120}px) rotate(4deg)`);
+  $("t-qd").style.opacity = p(t, S("t4") + .05, .35);
+  const qd = io((t - S("t4")) / (C("t4", "opens.") - S("t4")));
+  $("qd-fill").style.width = qd * 1728 + "px";
+  const broken = t >= C("t4", "opens.") - .2;
+  const plain = ["Meet at 6, bring the contract", "My PIN is in the drawer", "Transfer approved ✔"];
+  [0, 1, 2].forEach(i => { const b = t >= C("t4", "opens.") - .2 + i * .15; set("mc" + i, p(t, S("t4") + i * .2), b ? `translateX(${Math.sin(t * 70) * (t < C("t4", "opens.") + .3 ? 5 : 0)}px)` : "none");
+    $("mc" + i).style.borderColor = b ? "var(--bad)" : "var(--line)"; $("mi" + i).textContent = b ? "🔓" : "🔒";
+    $("mt" + i).textContent = b ? plain[i] : $("mt" + i).dataset.ct || ($("mt" + i).dataset.ct = $("mt" + i).textContent); $("mt" + i).style.color = b ? "#ffb3aa" : ""; $("mt" + i).style.fontFamily = b ? "var(--sans)" : ""; });
+  set("qd-note", p(t, S("t4") + .8, .6)); set("qd-label", broken ? 1 : .5);
+
+  // 3. Meet Sealr
+  const lg = p(t, S("i1") - .2, .8), up = p(t, S("i2"), .6);
+  set("i-logo", lg * (1 - p(t, S("i3") - .35, .3)), `translateY(${-up * 120}px) scale(${(.8 + .2 * lg) * (1 - .25 * up)})`);
+  $("bigmark").style.filter = `drop-shadow(0 0 ${30 + 20 * Math.sin(t * 3)}px rgba(62,224,192,.5))`;
+  [[S("i2") + .2], [S("i2") + .9], [C("i2", "Core")], [C("i2", "post-quantum")]].forEach(([a], i) => set("ic" + i, ...pop(t, a - .1)));
+  $("i-chips").style.opacity = win(t, S("i2"), S("i3") - .35, .3); $("i-chips").style.transform = `translateY(${-up * 130}px)`;
+  const fan = [[S("i3") - .1, -7, 50], [C("i3", "files,") - .3, 0, 0], [C("i3", "money.") - .3, 7, 50]];
+  fan.forEach(([a, r, y], i) => { drawPhone("ph-i" + i, t); const k = p(t, Math.max(a, S("i3") + .2), .55); set("ph-i" + i, k * (1 - p(t, S("i4") - .45, .35)), `translateY(${(1 - k) * 200 + y}px) rotate(${r}deg) scale(.9)`); });
+  $("il0").style.opacity = 0;
+  $("i-id").style.opacity = p(t, S("i4") + .05, .35);
+  set("idcard", ...pop(t, S("i4"))); set("ix0", ...pop(t, S("i4") + .3)); set("ix1", ...pop(t, C("i4", "email.") - .2)); set("ix2", ...pop(t, C("i4", "Your") - .1));
+  $("idcard").style.boxShadow = t > C("i4", "Your") ? "0 0 0 3px var(--accent), 0 0 80px rgba(62,224,192,.3)" : "none";
+
+  // 4. Get started
+  drawPhone("ph-acc", t); set("ph-acc", p(t, S("a1") - .4, .6), `translateY(${(1 - p(t, S("a1") - .4, .6)) * 80}px)`);
+  const stepAt = [S("a1"), S("a2") + .2, C("a2", "password.") - .7, S("a3"), S("a4")];
+  stepAt.forEach((a, i) => { const e = $("st" + i); const on = t >= a && (i === 4 || t < stepAt[i + 1]); e.className = "step" + (on ? " on" : t >= a ? " done" : ""); e.style.opacity = p(t, S("a1") + i * .12, .4); });
+
+  // 5. Chat + pay
+  drawPhone("ph-alice", t); drawPhone("ph-bob", t);
+  set("ph-alice", p(t, S("m1") - .4, .6), `translateX(${(1 - p(t, S("m1") - .4, .6)) * -200}px)`);
+  const bobIn = p(t, photo + 1.4, .6); set("ph-bob", bobIn, `translateX(${(1 - bobIn) * 220}px)`);
+  const fly = (a, d = 1.4) => { const k = io((t - a) / d); return t > a && t < a + d ? k : null; };
+  const f1 = fly(send1 + .6) ?? fly(photo + 1.0);
+  if (f1 !== null) { const x = 650 + f1 * 520, y = 520 - Math.sin(f1 * Math.PI) * 120; set("env", Math.min(1, Math.min(f1, 1 - f1) * 6), `translate(${x}px, ${y}px)`); } else set("env", 0);
+  set("seal-badge", win(t, S("m3"), S("m4") - .3, .3), `translateY(${(1 - p(t, S("m3"))) * 20}px)`);
+  set("server", win(t, S("m4") + .05, (E("m4") + .35) - .2, .3), `translateY(${(1 - p(t, S("m4"))) * 20}px)`);
+  $("srv-ct").scrollTop = (t * 30) % 60;
+  set("paid-badge", win(t, C("m8", "receipt") - .2, E("m10") + .6), `scale(${.9 + .1 * p(t, C("m8", "receipt") - .2)})`);
+  set("nc0", ...pop(t, S("m10"))); set("nc1", ...pop(t, S("m10") + .5));
+  $("nochips").style.opacity = 1 - p(t, E("m10") + .4, .4);
+
+  // 6. Groups
+  ["ph-ga", "ph-gb", "ph-gc"].forEach((id, i) => { drawPhone(id, t); const k = p(t, S("g1") - .4 + i * .15, .6); set(id, k, `translateY(${(1 - k) * 100}px) scale(.92)`); });
+  set("gb-st", ...pop(t, S("g3") + .3)); set("gc-st", ...pop(t, S("g4") + .2));
+  set("gc-x", p(t, C("g2", "Carol."), .4) * (.6 + .4 * Math.abs(Math.sin(t * 3))), "scale(.92)");
+  $("ph-gc").style.filter = t > C("g2", "Carol.") ? `saturate(${1 - .5 * p(t, C("g2", "Carol."))})` : "none";
+
+  // 7. Q-Day
+  set("q-head", ...pop(t, S("q1"))); $("q-head").style.opacity = win(t, S("q1"), S("q2") - .1, .35);
+  drawPhone("ph-q", t); const qin = p(t, S("q2"), .6); set("ph-q", qin * (1 - p(t, S("q7") - .45, .3)), `translateX(${(1 - qin) * -200}px)`);
+  $("q-what").style.opacity = win(t, S("q2") + .3, S("q4") - .35, .3);
+  set("q-enc", ...pop(t, S("q3"))); set("q-not", ...pop(t, S("q3") + 1.1));
+  $("q-ct").style.opacity = p(t, S("q2") + .5); $("q-ct").scrollTop = (t * 40) % 80;
+  $("q-sim").style.opacity = win(t, S("q4") + .1, S("q5") + 1.1, .3);
+  set("v-bad", win(t, S("q5") + 1.6, S("q7") - .45, .3) , `translateX(${(1 - p(t, S("q5") + 1.6)) * 60}px)`);
+  set("v-good", win(t, S("q6"), S("q7") - .45, .3), `translateX(${(1 - p(t, S("q6"))) * 60}px)`);
+  set("q-exp", ...pop(t, S("q7") + .05)); $("q-exp").style.opacity = p(t, S("q7") + .05, .35);
+
+  // 8. Final
+  $("f-eye").style.opacity = win(t, S("f1"), S("f3") - .3);
+  drawPhone("ph-w", t); const win8 = p(t, S("f1") - .3, .6); set("ph-w", win8 * (1 - p(t, S("f3") - .45, .3)), `translateY(${(1 - win8) * 100}px)`);
+  set("f-swap", win(t, S("f2"), C("f2", "verified") - .5, .3), `translateY(${(1 - p(t, S("f2"))) * 30}px)`);
+  set("f-browser", win(t, C("f2", "verified") - .15, S("f3") - .45, .3), `translateX(${(1 - p(t, C("f2", "verified") - .2, .6)) * 300}px)`);
+  set("f-hl", win(t, C("f2", "verified") + .6, S("f3") - .3) * (.6 + .4 * Math.abs(Math.sin(t * 4))));
+  $("f-three").style.opacity = win(t, S("f3") + .05, S("f4") - .4, .3);
+  set("f3a", ...pop(t, S("f3") - .1)); set("f3b", ...pop(t, C("f3", "Seamless") - .1)); set("f3c", ...pop(t, C("f3", "One") - .1));
+  $("f-end").style.opacity = p(t, S("f4") + .05, .4);
+  set("fe0", ...pop(t, S("f5"))); set("fe1", ...pop(t, C("f5", "Pay.") - .05)); set("fe2", ...pop(t, C("f5", "Stay") - .05));
+  set("fe3", ...pop(t, S("f6"))); set("fe4", p(t, S("f6") + .8, .8));
+}
+window.render = render;
+render(Number(new URLSearchParams(location.search).get("t") || 0));
+</script>
+</body></html>

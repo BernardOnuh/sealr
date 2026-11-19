@@ -1,0 +1,36 @@
+{
+  "name": "sealr",
+  "version": "0.1.0",
+  "description": "Quantum-safe chat, files and wallet on QoreChain",
+  "type": "module",
+  "private": true,
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "wallet": "node scripts/wallet.mjs",
+    "proof": "node scripts/proof.mjs",
+    "dev": "node server.mjs & vite client",
+    "build": "vite build client",
+    "start": "vite build client && node server.mjs"
+  },
+  "dependencies": {
+    "@cosmjs/amino": "^0.39.0",
+    "@cosmjs/proto-signing": "^0.39.0",
+    "@qorechain/qoreseal": "^0.1.0",
+    "@qorechain/qoresign": "^0.2.0",
+    "@scure/bip39": "^2.4.0",
+    "cosmjs-types": "^0.11.0",
+    "qrcode": "^1.5.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "undici": "^8.12.4",
+    "web-push": "^3.6.7"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.3",
+    "esbuild": "^0.25.10",
+    "vite": "^5.4.10"
+  }
+}

@@ -1,0 +1,61 @@
+{
+ "voice": {
+  "elevenlabs_voice_id": "EXAVITQu4vr4xnSDxMaL",
+  "model_id": "eleven_multilingual_v2",
+  "settings": {"stability": 0.45, "similarity_boost": 0.8, "style": 0.35, "use_speaker_boost": true}
+ },
+ "lead_in": 1.0,
+ "lines": [
+  {"id": "p1", "scene": "problem", "text": "Every day, we trust apps with our most private conversations, personal information, and money.", "pause": 0.5, "cues": ["conversations,", "information,", "money."]},
+  {"id": "p2", "scene": "problem", "text": "But data breaches keep happening. Millions of accounts exposed. Sensitive information stolen.", "pause": 0.5, "cues": ["Millions", "Sensitive"]},
+  {"id": "p3", "scene": "problem", "text": "And to send a message, share a file, or make a payment, we're constantly switching between different apps.", "pause": 0.45, "cues": ["message,", "file,", "payment,", "switching"]},
+  {"id": "p4", "scene": "problem", "text": "More apps. More accounts. More risks.", "pause": 0.8, "cues": ["accounts.", "risks."]},
+
+  {"id": "t1", "scene": "quantum", "text": "But the biggest threat may still be ahead.", "pause": 0.4},
+  {"id": "t2", "scene": "quantum", "text": "Attackers can capture encrypted data today and store it for the future.", "pause": 0.35, "cues": ["store"]},
+  {"id": "t3", "scene": "quantum", "text": "It's called harvest now, decrypt later.", "pause": 0.4},
+  {"id": "t4", "scene": "quantum", "text": "And when powerful quantum computers arrive, encryption that protects us today could become vulnerable.", "speak": "And when powerful quantum computers arrive, encryption that protects us today could become vulnerable.", "pause": 0.8, "cues": ["vulnerable."]},
+
+  {"id": "i1", "scene": "intro", "text": "Introducing Sealr.", "speak": "Introducing Sealer.", "pause": 0.5},
+  {"id": "i2", "scene": "intro", "text": "A private messaging and crypto payment app, built on QoreChain and designed with post-quantum encryption.", "speak": "A private messaging and crypto payment app, built on Core Chain and designed with post-quantum encryption.", "pause": 0.4, "cues": ["built", "designed"]},
+  {"id": "i3", "scene": "intro", "text": "One place to communicate, share files, and move money.", "pause": 0.4, "cues": ["files,", "money."]},
+  {"id": "i4", "scene": "intro", "text": "No phone number. No email. Your wallet is your identity.", "pause": 0.8, "cues": ["email.", "Your"]},
+
+  {"id": "a1", "scene": "account", "text": "Getting started is simple.", "pause": 0.3},
+  {"id": "a2", "scene": "account", "text": "Create your account, securely back up your recovery phrase, and set your password.", "pause": 0.35, "cues": ["securely", "password."]},
+  {"id": "a3", "scene": "account", "text": "Your private keys stay on your device.", "pause": 0.35},
+  {"id": "a4", "scene": "account", "text": "And Sealr AI guides you through the experience.", "speak": "And Sealer A.I. guides you through the experience.", "pause": 0.8},
+
+  {"id": "m1", "scene": "chat", "text": "Now, watch this.", "pause": 0.3},
+  {"id": "m2", "scene": "chat", "text": "Alice sends Bob a private message, then shares a photo.", "pause": 0.35, "cues": ["then"]},
+  {"id": "m3", "scene": "chat", "text": "Before either leaves her device, Sealr encrypts the content.", "speak": "Before either leaves her device, Sealer encrypts the content.", "pause": 0.3},
+  {"id": "m4", "scene": "chat", "text": "The server handles encrypted data, not readable conversations.", "pause": 0.5},
+  {"id": "m5", "scene": "chat", "text": "But here's where it gets interesting.", "pause": 0.3},
+  {"id": "m6", "scene": "chat", "text": "Alice requests five QOR directly inside the chat.", "speak": "Alice requests five Core directly inside the chat.", "pause": 0.3},
+  {"id": "m7", "scene": "chat", "text": "Bob taps Pay.", "pause": 0.3},
+  {"id": "m8", "scene": "chat", "text": "The transaction is processed on QoreChain, and the payment confirmation appears right in their conversation.", "speak": "The transaction is processed on Core Chain, and the payment confirmation appears right in their conversation.", "pause": 0.4, "cues": ["confirmation"]},
+  {"id": "m9", "scene": "chat", "text": "No switching apps. No copying wallet addresses.", "pause": 0.25, "cues": ["copying"]},
+  {"id": "m10", "scene": "chat", "text": "Just chat and pay.", "pause": 0.8},
+
+  {"id": "g1", "scene": "group", "text": "Privacy matters in groups too.", "pause": 0.3},
+  {"id": "g2", "scene": "group", "text": "When Alice removes Carol from a group, Sealr updates the encryption keys.", "speak": "When Alice removes Carol from a group, Sealer updates the encryption keys.", "pause": 0.35, "cues": ["updates"]},
+  {"id": "g3", "scene": "group", "text": "Bob can read new messages.", "pause": 0.25},
+  {"id": "g4", "scene": "group", "text": "Carol can't decrypt messages sent after her removal.", "pause": 0.35},
+  {"id": "g5", "scene": "group", "text": "Access changes. Privacy stays protected.", "pause": 0.8, "cues": ["Privacy"]},
+
+  {"id": "q1", "scene": "qday", "text": "Now for the real test.", "pause": 0.3},
+  {"id": "q2", "scene": "qday", "text": "Let's see what someone intercepting a Sealr message would actually capture.", "speak": "Let's see what someone intercepting a Sealer message would actually capture.", "pause": 0.3},
+  {"id": "q3", "scene": "qday", "text": "Encrypted data. Not the original conversation.", "pause": 0.4},
+  {"id": "q4", "scene": "qday", "text": "Next, we run our Q-Day simulator.", "speak": "Next, we run our Q Day simulator.", "pause": 0.3},
+  {"id": "q5", "scene": "qday", "text": "The demonstration shows how quantum-vulnerable encryption can be compromised.", "pause": 0.3, "cues": ["compromised."]},
+  {"id": "q6", "scene": "qday", "text": "But Sealr's post-quantum encrypted message remains protected in the simulation.", "speak": "But Sealer's post-quantum encrypted message remains protected in the simulation.", "pause": 0.4},
+  {"id": "q7", "scene": "qday", "text": "Because privacy shouldn't have an expiration date.", "pause": 0.9},
+
+  {"id": "f1", "scene": "final", "text": "And there's more.", "pause": 0.3},
+  {"id": "f2", "scene": "final", "text": "Swap QOR to fUSD, confirm your transaction, and verify it on QoreChain.", "speak": "Swap Core to F U S D, confirm your transaction, and verify it on Core Chain.", "pause": 0.5, "cues": ["confirm", "verify"]},
+  {"id": "f3", "scene": "final", "text": "Private conversations. Seamless payments. One identity.", "pause": 0.5, "cues": ["Seamless", "One"]},
+  {"id": "f4", "scene": "final", "text": "Sealr.", "speak": "Sealer.", "pause": 0.4},
+  {"id": "f5", "scene": "final", "text": "Talk. Pay. Stay private.", "pause": 0.3, "cues": ["Pay.", "Stay"]},
+  {"id": "f6", "scene": "final", "text": "Today, and beyond Q-Day.", "speak": "Today, and beyond Q Day.", "pause": 2.2}
+ ]
+}

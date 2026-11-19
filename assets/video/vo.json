@@ -1,0 +1,331 @@
+{
+ "voice": {
+  "elevenlabs_voice_id": "EXAVITQu4vr4xnSDxMaL",
+  "model_id": "eleven_multilingual_v2",
+  "settings": {
+   "stability": 0.45,
+   "similarity_boost": 0.8,
+   "style": 0.35,
+   "use_speaker_boost": true
+  }
+ },
+ "lead_in": 1.0,
+ "lines": [
+  {
+   "id": "p1",
+   "scene": "problem",
+   "text": "We trust apps with our chats, data, and money.",
+   "pause": 0.5,
+   "cues": [
+    "chats,",
+    "data,",
+    "money."
+   ]
+  },
+  {
+   "id": "p2",
+   "scene": "problem",
+   "text": "But breaches keep happening. Millions exposed.",
+   "pause": 0.5,
+   "cues": [
+    "Millions",
+    "exposed."
+   ]
+  },
+  {
+   "id": "p3",
+   "scene": "problem",
+   "text": "To chat, share, or pay, we juggle apps.",
+   "pause": 0.4,
+   "cues": [
+    "chat,",
+    "share,",
+    "pay,",
+    "juggle"
+   ]
+  },
+  {
+   "id": "p4",
+   "scene": "problem",
+   "text": "More apps. More risks.",
+   "pause": 0.7,
+   "cues": [
+    "risks."
+   ]
+  },
+  {
+   "id": "t1",
+   "scene": "quantum",
+   "text": "The biggest threat is ahead.",
+   "pause": 0.35
+  },
+  {
+   "id": "t2",
+   "scene": "quantum",
+   "text": "Attackers store encrypted data today.",
+   "pause": 0.3,
+   "cues": [
+    "store"
+   ]
+  },
+  {
+   "id": "t3",
+   "scene": "quantum",
+   "text": "Harvest now, decrypt later.",
+   "pause": 0.35
+  },
+  {
+   "id": "t4",
+   "scene": "quantum",
+   "text": "When quantum computers arrive, it all opens.",
+   "pause": 0.7,
+   "cues": [
+    "opens."
+   ]
+  },
+  {
+   "id": "i1",
+   "scene": "intro",
+   "text": "Introducing Sealr.",
+   "pause": 0.4
+  },
+  {
+   "id": "i2",
+   "scene": "intro",
+   "text": "Private chat and payments on QoreChain, post-quantum encrypted.",
+   "speak": "Private chat and payments on Core Chain, post-quantum encrypted.",
+   "pause": 0.35,
+   "cues": [
+    "Core",
+    "post-quantum"
+   ]
+  },
+  {
+   "id": "i3",
+   "scene": "intro",
+   "text": "Chat, share files, move money.",
+   "pause": 0.6,
+   "cues": [
+    "files,",
+    "money."
+   ]
+  },
+  {
+   "id": "i4",
+   "scene": "intro",
+   "text": "No phone. No email. Your wallet is your identity.",
+   "pause": 0.7,
+   "cues": [
+    "email.",
+    "Your"
+   ]
+  },
+  {
+   "id": "a1",
+   "scene": "account",
+   "text": "Sign up in a minute.",
+   "pause": 0.25
+  },
+  {
+   "id": "a2",
+   "scene": "account",
+   "text": "Back up your phrase, set a password.",
+   "pause": 0.3,
+   "cues": [
+    "Back",
+    "password."
+   ]
+  },
+  {
+   "id": "a3",
+   "scene": "account",
+   "text": "Keys stay on your device.",
+   "pause": 0.3
+  },
+  {
+   "id": "a4",
+   "scene": "account",
+   "text": "And Sealr AI guides you.",
+   "speak": "And Sealr A.I. guides you.",
+   "pause": 0.7
+  },
+  {
+   "id": "m1",
+   "scene": "chat",
+   "text": "Watch.",
+   "pause": 0.25
+  },
+  {
+   "id": "m2",
+   "scene": "chat",
+   "text": "Alice sends Bob a message, then a photo.",
+   "pause": 0.7,
+   "cues": [
+    "then"
+   ]
+  },
+  {
+   "id": "m3",
+   "scene": "chat",
+   "text": "Encrypted on her phone.",
+   "pause": 0.3
+  },
+  {
+   "id": "m4",
+   "scene": "chat",
+   "text": "The server sees only ciphertext.",
+   "pause": 0.4
+  },
+  {
+   "id": "m6",
+   "scene": "chat",
+   "text": "Alice requests a payment in the chat.",
+   "pause": 0.5
+  },
+  {
+   "id": "m7",
+   "scene": "chat",
+   "text": "Bob taps Pay.",
+   "pause": 0.25
+  },
+  {
+   "id": "m8",
+   "scene": "chat",
+   "text": "It settles on QoreChain, receipt in the chat.",
+   "speak": "It settles on Core Chain, receipt in the chat.",
+   "pause": 0.9,
+   "cues": [
+    "receipt"
+   ]
+  },
+  {
+   "id": "m10",
+   "scene": "chat",
+   "text": "No switching apps. Just chat and pay.",
+   "pause": 0.7,
+   "cues": [
+    "Just"
+   ]
+  },
+  {
+   "id": "g1",
+   "scene": "group",
+   "text": "Groups too.",
+   "pause": 0.25
+  },
+  {
+   "id": "g2",
+   "scene": "group",
+   "text": "Alice removes Carol.",
+   "pause": 0.6,
+   "cues": [
+    "Carol."
+   ]
+  },
+  {
+   "id": "g3",
+   "scene": "group",
+   "text": "Bob still reads.",
+   "pause": 0.25
+  },
+  {
+   "id": "g4",
+   "scene": "group",
+   "text": "Carol can't.",
+   "pause": 1.0
+  },
+  {
+   "id": "q1",
+   "scene": "qday",
+   "text": "The real test.",
+   "pause": 0.25
+  },
+  {
+   "id": "q2",
+   "scene": "qday",
+   "text": "What a spy captures:",
+   "pause": 0.25
+  },
+  {
+   "id": "q3",
+   "scene": "qday",
+   "text": "Ciphertext. Nothing readable.",
+   "pause": 0.35
+  },
+  {
+   "id": "q4",
+   "scene": "qday",
+   "text": "Run the Q-Day simulator.",
+   "speak": "Run the Q Day simulator.",
+   "pause": 0.9
+  },
+  {
+   "id": "q5",
+   "scene": "qday",
+   "text": "Classic encryption cracks.",
+   "pause": 1.0
+  },
+  {
+   "id": "q6",
+   "scene": "qday",
+   "text": "Sealr's stays sealed.",
+   "pause": 0.35
+  },
+  {
+   "id": "q7",
+   "scene": "qday",
+   "text": "Privacy shouldn't have an expiration date.",
+   "pause": 0.8
+  },
+  {
+   "id": "f1",
+   "scene": "final",
+   "text": "There's more.",
+   "pause": 0.25
+  },
+  {
+   "id": "f2",
+   "scene": "final",
+   "text": "Swap tokens, verified on QoreChain.",
+   "speak": "Swap tokens, verified on Core Chain.",
+   "pause": 1.6,
+   "cues": [
+    "tokens,",
+    "verified"
+   ]
+  },
+  {
+   "id": "f3",
+   "scene": "final",
+   "text": "Private chats. Seamless payments. One identity.",
+   "pause": 0.45,
+   "cues": [
+    "Seamless",
+    "One"
+   ]
+  },
+  {
+   "id": "f4",
+   "scene": "final",
+   "text": "Sealr.",
+   "pause": 0.35
+  },
+  {
+   "id": "f5",
+   "scene": "final",
+   "text": "Talk. Pay. Stay private.",
+   "pause": 0.3,
+   "cues": [
+    "Pay.",
+    "Stay"
+   ]
+  },
+  {
+   "id": "f6",
+   "scene": "final",
+   "text": "Today, and beyond Q-Day.",
+   "speak": "Today, and beyond Q Day.",
+   "pause": 2.2
+  }
+ ]
+}
