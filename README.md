@@ -195,9 +195,6 @@ Then claim test QOR from the QoreChain faucet for your address and send your fir
 - **Metadata is visible to the relay.** It sees who messages whom and when, but not what.
 - **Your password protects your seed in this browser.** Lose both and the account can't be recovered.
 
-## 🗓️ History
-
-Sealr was written locally from 17 to 19 November 2026 and first committed to git on 22 November 2026, so the commit history starts on that date.
 
 ## 📄 Licence
 
