@@ -49,7 +49,7 @@ Request QOR, pay a request, or swap, without leaving the conversation. Every tra
 <td valign="top">
 
 ### 👥 Groups with real removal
-Each group message is sealed for every current member, and the key rotates on removal. A removed member's next message shows as **locked**; there is no shared key left to keep.
+Each group message is sealed separately for every current member, so there is no shared group key. Once someone is removed, they are simply no longer a recipient: their app shows the next message as **locked**.
 
 </td>
 <td valign="top">
