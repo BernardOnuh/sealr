@@ -195,6 +195,23 @@ Then claim test QOR from the QoreChain faucet for your address and send your fir
 - **Metadata is visible to the relay.** It sees who messages whom and when, but not what.
 - **Your password protects your seed in this browser.** Lose both and the account can't be recovered.
 
+## 🙏 Credits
+
+Sealr is built on these kits, libraries and services. Thank you to their authors.
+
+| Used for | Credit |
+|---|---|
+| Hybrid signing, PQ key registration, message signatures | [`@qorechain/qoresign`](https://www.npmjs.com/package/@qorechain/qoresign) (QoreChain kit) |
+| ML-KEM-1024 + X25519 sealing, recipient cards, group epoch keys | [`@qorechain/qoreseal`](https://www.npmjs.com/package/@qorechain/qoreseal) (QoreChain kit) |
+| Transaction encoding | [CosmJS](https://github.com/cosmos/cosmjs) (`@cosmjs/amino`, `@cosmjs/proto-signing`) and [`cosmjs-types`](https://github.com/confio/cosmjs-types) |
+| Q-Day simulation, seed vault | [`@noble/curves`](https://github.com/paulmillr/noble-curves), [`@noble/ciphers`](https://github.com/paulmillr/noble-ciphers), [`@noble/hashes`](https://github.com/paulmillr/noble-hashes) |
+| Seed phrases, encoding | [`@scure/bip39`](https://github.com/paulmillr/scure-bip39), [`@scure/base`](https://github.com/paulmillr/scure-base) |
+| App and build | [React](https://react.dev), [Vite](https://vitejs.dev), [esbuild](https://esbuild.github.io) |
+| Relay | [`web-push`](https://github.com/web-push-libs/web-push), [`undici`](https://github.com/nodejs/undici), [`qrcode`](https://github.com/soldair/node-qrcode) |
+| Sealr AI | Free models through [OpenRouter](https://openrouter.ai) |
+| Walkthrough narration | [ElevenLabs](https://elevenlabs.io) text-to-speech |
+| Network | [QoreChain](https://qorechain.io) testnet `qorechain-diana`, faucet and explorer |
+
 
 ## 📄 Licence
 
